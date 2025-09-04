@@ -2,7 +2,15 @@ const createElements = (arr) =>{
     const htmlElements = arr.map((el) => `<span class="btn">${el}</span>`);
     return htmlElements.join(" ");
 }
-
+const mangaeSpinner = (status) =>{
+    if(status === true){
+        document.getElementById('spinner').classList.remove('hidden');
+        document.getElementById('word-container').classList.add('hidden');
+    }else{
+        document.getElementById('word-container').classList.remove('hidden');
+        document.getElementById('spinner').classList.add('hidden');
+    }
+}
 const loadLessons = () =>{
     fetch('https://openapi.programming-hero.com/api/levels/all')
     .then(response => response.json())
@@ -14,6 +22,7 @@ const removeActive = () =>{
     lessonButton.forEach(btn => btn.classList.remove('active'));
 }
 const loadLevelWord = (id) =>{
+    mangaeSpinner(true);
     const url = `https://openapi.programming-hero.com/api/level/${id}`;
     fetch(url)
     .then(res => res.json())
@@ -34,21 +43,7 @@ const loadWordDetail = async(id) =>{
 }
 
 
-// {
-//     "word": "Hesitate",
-//     "meaning": "দ্বিধা করা",
-//     "pronunciation": "হেজিটেট",
-//     "level": 2,
-//     "sentence": "Don't hesitate to ask questions in class.",
-//     "points": 2,
-//     "partsOfSpeech": "verb",
-//     "synonyms": [
-//         "pause",
-//         "waver",
-//         "doubt"
-//     ],
-//     "id": 8
-// }
+
 
 const displayWordDetails =(word) =>{
     console.log(word)
@@ -85,13 +80,11 @@ const displayLevelWord = (words) =>{
                 </div>
         
         `;
+        mangaeSpinner(false)
         return;
     }
     words.forEach(word => {
         // console.log(word);
-        
-
-
         const card = document.createElement('div');
         card.innerHTML = `
         <div class="bg-white py-10 px-5 rounded-lg text-center space-y-4">
@@ -106,6 +99,7 @@ const displayLevelWord = (words) =>{
         `
         wordContainer.appendChild(card);
     });
+    mangaeSpinner(false);
 }
 const displayLessons= (lessons) =>{
     const levelContainer = document.getElementById('level-container');
@@ -121,3 +115,16 @@ const displayLessons= (lessons) =>{
     }
 }
 loadLessons();
+
+document.getElementById('btn-search').addEventListener('click', function(){
+    const input = document.getElementById('input-search');
+    const searchValue = input.value.trim().toLowerCase();
+    console.log(searchValue);
+    fetch('https://openapi.programming-hero.com/api/words/all')
+    .then(res => res.json())
+    .then(data => {
+        allWords = data.data;
+        const filterWords = allWords.filter((word) =>word.word.toLowerCase().includes(searchValue));
+        displayLevelWord(filterWords);
+    });
+})
