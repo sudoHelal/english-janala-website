@@ -1,4 +1,7 @@
-
+const createElements = (arr) =>{
+    const htmlElements = arr.map((el) => `<span class="btn">${el}</span>`);
+    return htmlElements.join(" ");
+}
 
 const loadLessons = () =>{
     fetch('https://openapi.programming-hero.com/api/levels/all')
@@ -21,6 +24,54 @@ const loadLevelWord = (id) =>{
         clickBtn.classList.add("active"); //add active class
         displayLevelWord(data.data)
     });
+}
+
+const loadWordDetail = async(id) =>{
+    const url = `https://openapi.programming-hero.com/api/word/${id}`;
+    const res = await fetch(url);
+    const details = await res.json();
+    displayWordDetails(details.data);
+}
+
+
+// {
+//     "word": "Hesitate",
+//     "meaning": "দ্বিধা করা",
+//     "pronunciation": "হেজিটেট",
+//     "level": 2,
+//     "sentence": "Don't hesitate to ask questions in class.",
+//     "points": 2,
+//     "partsOfSpeech": "verb",
+//     "synonyms": [
+//         "pause",
+//         "waver",
+//         "doubt"
+//     ],
+//     "id": 8
+// }
+
+const displayWordDetails =(word) =>{
+    console.log(word)
+    const wordDetailsContainer = document.getElementById('word-details-container');
+    wordDetailsContainer.innerHTML = `
+    
+    <div class="space-y-5">
+        <h2 class="text-2xl font-bold">${word.word} (<i class="fa-solid fa-microphone-lines"></i>:${word.pronunciation})</h2>
+        <h2 class="font-bold">Meaning</h2>
+        <p>${word.meaning}</p>
+        <h3>Example</h3>
+        <p>${word.sentence}</p>
+        <div>
+          <h3>সমার্থক শব্দ গুলো</h3>
+          <div class="space-x-4">
+          <div>${createElements(word.synonyms)}</div>         
+          
+          </div>         
+        </div>
+        <button class="btn">Complete Learning</button>
+      </div>
+    `;
+    document.getElementById('word_detail').showModal();
 }
 const displayLevelWord = (words) =>{
     const wordContainer = document.getElementById('word-container');
@@ -48,7 +99,7 @@ const displayLevelWord = (words) =>{
                     <p class="font-semibold">Meaning /Pronounciation</p>
                     <h3 class="text-2xl font-medium font-bangla">"${word.meaning ? word.meaning : "No word meaning found"} / ${word.pronunciation ? word.pronunciation: "No pronunciation found"}"</h3>
                     <div class="flex justify-between items-center">
-                        <button class="btn bg-[#1a91ff1a]"><i class="fa-solid fa-circle-info"></i></button>
+                        <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1a91ff1a]"><i class="fa-solid fa-circle-info"></i></button>
                         <button class="btn bg-[#1a91ff1a]"><i class="fa-solid fa-volume-high"></i></button>
                     </div>
                 </div>

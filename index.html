@@ -75,6 +75,9 @@
             </div>
         </section>
         <section>
+          
+        </section>
+        <section>
             <div id="word-container" class="bg-gray-100 p-10 w-11/12 mx-auto my-10 grid grid-cols-3 gap-5">
                 <div class="text-center bg-sky-100 col-span-full rounded-xl py-10 space-y-6 font-bangla">
                   <p class="text-xl font-medium text-gray-400">আপনি এখনো কোন Lesson Select করেন নি</p>
@@ -83,7 +86,23 @@
             </div>
         </section>
 
-        
+        <section>
+          <!-- Open the modal using ID.showModal() method -->
+<!-- <button class="btn" onclick="my_modal_5.showModal()">open modal</button> -->
+<dialog id="word_detail" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <div id="word-details-container" >
+      
+    </div>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+        </section>
     </main>
     <script src="./script/index.js"></script>
 </body>
